@@ -47,17 +47,14 @@ class WaveController:
         them in self.state for later use offline
         """
 
+        f = 3
         A = 1
         eps = 1
-        freq = 2
-
-        activations = np.zeros(30)
-        i = np.linspace(self.n_joints)
-
-        activations[::2] = 0.5 * A / 2 * np.sin(2 * np.pi * (freq * time - eps * i / self.n_joints))
-        activations[1::2] = 0.5 * (-A) / 2 * np.sin(2 * np.pi * (freq * time - eps * i / self.n_joints))
-
-        self.state[iteration] = activations
-
-        return np.zeros(30)
+        N = self.pars.n_joints
+        i = np.arange(15)
+        #t = timestep*iteration
+        t = time
+        self.state[iteration,self.muscle_l] = 0.5 + A/2*np.sin(2*np.pi*(f*t-eps*i/N))
+        self.state[iteration,self.muscle_r] = 0.5 + A/2*np.sin(2*np.pi*(f*t-eps*i/N))
+        return self.state[iteration]
 
