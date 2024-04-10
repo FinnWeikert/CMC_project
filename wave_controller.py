@@ -46,5 +46,18 @@ class WaveController:
         In addition to returning the activation functions, store
         them in self.state for later use offline
         """
+
+        A = 1
+        eps = 1
+        freq = 2
+
+        activations = np.zeros(30)
+        i = np.linspace(self.n_joints)
+
+        activations[::2] = 0.5 * A / 2 * np.sin(2 * np.pi * (freq * time - eps * i / self.n_joints))
+        activations[1::2] = 0.5 * (-A) / 2 * np.sin(2 * np.pi * (freq * time - eps * i / self.n_joints))
+
+        self.state[iteration] = activations
+
         return np.zeros(30)
 
