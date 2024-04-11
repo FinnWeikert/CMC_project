@@ -47,9 +47,9 @@ class WaveController:
         them in self.state for later use offline
         """
 
-        A = 1
+        A = 0.8
         eps = 1
-        freq = 2
+        freq = 4
 
         activations = np.zeros(30)
         i = np.arange(self.n_joints)

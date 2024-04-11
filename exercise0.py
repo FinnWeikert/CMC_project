@@ -7,7 +7,12 @@ from plotting_common import plot_left_right, plot_trajectory, plot_time_historie
 import farms_pylog as pylog
 
 
-def exercise0():
+def exercise0(**kwargs):
+
+    # declare fixed values of amplitude, frequency, and epsilon
+    A = 1
+    eps = 1
+    freq = 2
 
     pylog.info("Ex 0")
     pylog.info("Implement exercise 0")
@@ -33,6 +38,42 @@ def exercise0():
     left_idx = controller.muscle_l
     right_idx = controller.muscle_r
 
+    # plot using plot_left_right
+    plot_left_right(
+        controller.times,
+        controller.state,
+        left_idx,
+        right_idx,
+        cm="green",
+        offset=0.1)
+
+    # plot using plot_trajectory
+    plt.figure("trajectory")
+    plot_trajectory(controller)
+
+    # plot using plot_time_histories_multiple_windows
+    plt.figure("joint positions")
+    plot_time_histories_multiple_windows(
+        controller.times,
+        controller.joints_positions,
+        offset=-0.4,
+        colors="green",
+        ylabel="joint positions",
+        lw=1
+    )
+
+    # plot using plot_time_histories
+    plt.figure("link y-velocities")
+    plot_time_histories(
+        controller.times,
+        controller.links_velocities[:, :, 1],
+        offset=-0.,
+        colors="green",
+        ylabel="link y-velocities",
+        lw=1
+    )
+
 if __name__ == '__main__':
-    exercise0()
+    exercise0(headless=False)
+    plt.show()
 
