@@ -52,12 +52,16 @@ class WaveController:
         freq = 2
 
         activations = np.zeros(30)
-        i = np.linspace(self.n_joints)
+        i = np.arange(self.n_joints)
 
-        activations[::2] = 0.5 * A / 2 * np.sin(2 * np.pi * (freq * time - eps * i / self.n_joints))
-        activations[1::2] = 0.5 * (-A) / 2 * np.sin(2 * np.pi * (freq * time - eps * i / self.n_joints))
+        activations[self.muscle_l] = 0.5 * A / 2 * np.sin(2 * np.pi * (freq * time - eps * i / self.n_joints))
+        activations[self.muscle_r] = 0.5 * (-A) / 2 * np.sin(2 * np.pi * (freq * time - eps * i / self.n_joints))
 
         self.state[iteration] = activations
 
-        return np.zeros(30)
+        return activations
 
+#  where to add the paramters A, eps ,and freq   QUESTION
+# "It also contains the metrics dictionary ???"  QUESTION
+#  should the differential equation be implemented here??  QUESTION
+    
