@@ -23,7 +23,7 @@ def compute_speed_cycle(
     """
     Compute forward and lateral speeds using the xy joint positions
     sampled across cycles using the frequency computed using the
-    treshold crossing method
+    threshold crossing method
     """
 
     n_steps = network.links_positions.shape[0]
