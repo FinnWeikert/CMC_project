@@ -21,9 +21,6 @@ class WaveController:
         # state array for recording all the variables
         self.state = np.zeros((pars.n_iterations, 2*self.n_joints))
 
-        pylog.warning(
-            "Implement below the step function following the instructions here and in the report")
-
         # indexes of the left muscle activations (optional)
         self.muscle_l = 2*np.arange(15)
         # indexes of the right muscle activations (optional)
@@ -47,14 +44,21 @@ class WaveController:
         them in self.state for later use offline
         """
 
-        f = 3
-        A = 1
+        A = 0.8
         eps = 1
-        N = self.pars.n_joints
-        i = np.arange(15)
-        #t = timestep*iteration
-        t = time
-        self.state[iteration,self.muscle_l] = 0.5 + A/2*np.sin(2*np.pi*(f*t-eps*i/N))
-        self.state[iteration,self.muscle_r] = 0.5 + A/2*np.sin(2*np.pi*(f*t-eps*i/N))
-        return self.state[iteration]
+        freq = 4
 
+        activations = np.zeros(30)
+        i = np.arange(self.n_joints)
+
+        activations[self.muscle_l] = 0.5 * A / 2 * np.sin(2 * np.pi * (freq * time - eps * i / self.n_joints))
+        activations[self.muscle_r] = 0.5 * (-A) / 2 * np.sin(2 * np.pi * (freq * time - eps * i / self.n_joints))
+
+        self.state[iteration] = activations
+
+        return activations
+
+#  where to add the paramters A, eps ,and freq   QUESTION
+# "It also contains the metrics dictionary ???"  QUESTION
+#  should the differential equation be implemented here??  QUESTION
+    
