@@ -46,8 +46,8 @@ class WaveController:
 
         # Changed this may not be the optimal place to do so
         A = self.pars.amp if hasattr(self.pars, 'amp') else 0.8        
-        eps = self.pars.wavefrequency if hasattr(self.pars, 'wavefrequency') else 2
-        freq = 3
+        eps = self.pars.wavefrequency if hasattr(self.pars, 'wavefrequency') else 1
+        freq = 2.5
 
         activations = np.zeros(30)
         i = np.arange(self.n_joints)

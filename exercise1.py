@@ -15,7 +15,7 @@ def exercise1(**kwargs):
     os.makedirs(log_path, exist_ok=True)
 
 
-    nsim = 1
+    nsim = 2
     # Lists to store amplitudes and wave frequencies per sim
     amps = []
     wave_freqs = []
@@ -83,9 +83,6 @@ def exercise1(**kwargs):
             speed_metric_dict["max_lspeed_cycle"][3] = controller.pars.simulation_i    
         
     d = 1 # debug
-
-    # PROBLEM: all signals controllers result in the same metrics for some reason... => first try to plo
-    # the states (M_l, M_R and M_diff) as function of time to see if they change at all depending on the input
 
     # TO DO: Keep track of all the speed values, so plots can be made where the optimum is clearly visible => see plot_2d
     # maybe look for library that does 2d grid search faster?
