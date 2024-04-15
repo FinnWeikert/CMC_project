@@ -25,6 +25,8 @@ def exercise0(**kwargs):
         log_path=log_path,
         compute_metrics=3,
         return_network=True,
+        wavefrequency=1,
+        amp=0.5,
         **kwargs
     )
 
@@ -33,7 +35,7 @@ def exercise0(**kwargs):
         all_pars
     )
 
-    pylog.info("Plotting the result")
+    """pylog.info("Plotting the result")
 
     left_idx = controller.muscle_l
     right_idx = controller.muscle_r
@@ -71,7 +73,7 @@ def exercise0(**kwargs):
         colors="green",
         ylabel="link y-velocities",
         lw=1
-    )
+    )"""
 
 if __name__ == '__main__':
     exercise0(headless=False)
