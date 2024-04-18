@@ -51,9 +51,9 @@ class WaveController:
         # Ask about this: ipls = wavefreq / freq
         # clarify what wave freq and ipls is?
 
-        A = self.pars.amp if hasattr(self.pars, 'amp') else 0.8        
-        eps = self.pars.wavefrequency if hasattr(self.pars, 'wavefrequency') else 1
-        freq = 2.5
+        A = self.pars.amp if hasattr(self.pars, 'amp') else 0.48        
+        eps = self.pars.wavefrequency if hasattr(self.pars, 'wavefrequency') else 0.48
+        freq = self.pars.frequency if hasattr(self.pars, 'frequency') else 2.5
 
         activations = np.zeros(30)
         i = np.arange(self.n_joints)
@@ -77,7 +77,7 @@ class WaveController:
 
         return activations
 
-# MOVE helper function somewhere else later ?
+# Move these function somewhere else later ?
 ############## sigmoid gain functions ##############
 
 def sigmoid_gain(input_signal, gain):

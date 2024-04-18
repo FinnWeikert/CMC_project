@@ -8,7 +8,7 @@ import farms_pylog as pylog
 import matplotlib.pyplot as plt
 
 
-# How to do it: change Wave_controller so in pars it check for controller type "sin" "square_sig" or "square_arctan"
+# Note: changes mostly made in wave_controller not here
 def exercise2(**kwargs):
 
     pylog.info("Ex 2")
