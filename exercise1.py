@@ -87,6 +87,8 @@ def exercise1(**kwargs):
     # TO DO: Keep track of all the speed values, so plots can be made where the optimum is clearly visible => see plot_2d
     # maybe look for library that does 2d grid search faster?
 
+    # should we consider any other metrics than the speed?
+
     # goal code parameter search for largest speed 
 if __name__ == '__main__':
     exercise1()

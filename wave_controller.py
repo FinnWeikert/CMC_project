@@ -26,6 +26,9 @@ class WaveController:
         # indexes of the right muscle activations (optional)
         self.muscle_r = self.muscle_l+1
 
+        # added
+        self.square_controller = pars.square_controller
+
     def step(self, iteration, time, timestep, pos=None):
         """
         Step function. This function passes the activation functions of the muscle model
@@ -45,6 +48,9 @@ class WaveController:
         """
 
         # Changed this may not be the optimal place to do so
+        # Ask about this: ipls = wavefreq / freq
+        # clarify what wave freq and ipls is?
+
         A = self.pars.amp if hasattr(self.pars, 'amp') else 0.8        
         eps = self.pars.wavefrequency if hasattr(self.pars, 'wavefrequency') else 1
         freq = 2.5
@@ -52,14 +58,34 @@ class WaveController:
         activations = np.zeros(30)
         i = np.arange(self.n_joints)
 
-        activations[self.muscle_l] = 0.5 * A / 2 * np.sin(2 * np.pi * (freq * time - eps * i / self.n_joints))
-        activations[self.muscle_r] = 0.5 * (-A) / 2 * np.sin(2 * np.pi * (freq * time - eps * i / self.n_joints))
+        sin_signal = np.sin(2 * np.pi * (freq * time - eps * i / self.n_joints))
+                      
+        if self.square_controller == None:
+            activations[self.muscle_l] = 0.5 * A / 2 * np.sin(2 * np.pi * (freq * time - eps * i / self.n_joints))
+            activations[self.muscle_r] = 0.5 * (-A) / 2 * np.sin(2 * np.pi * (freq * time - eps * i / self.n_joints))
+            # Proj 1 part 3 gain functions
+        elif self.square_controller == "sigmoid":
+            activations[self.muscle_l] = 0.5 * A / 2 * sigmoid_gain(sin_signal, gain=5)
+            activations[self.muscle_r] = 0.5 * (-A) / 2 * sigmoid_gain(sin_signal, gain=5)
+        elif self.square_controller == "arctan":
+            activations[self.muscle_l] = 0.5 * A / 2 * arctan_gain(sin_signal, gain=5)
+            activations[self.muscle_r] = 0.5 * (-A) / 2 * arctan_gain(sin_signal, gain=5)
+        else:
+            raise ValueError("Invalid controller type. Supported types are 'sine', 'square_sig', and 'square_arctan'.")
 
         self.state[iteration] = activations
 
         return activations
 
-#  where to add the paramters A, eps ,and freq   QUESTION
-# "It also contains the metrics dictionary ???"  QUESTION
-#  should the differential equation be implemented here??  QUESTION
+# MOVE helper function somewhere else later ?
+############## sigmoid gain functions ##############
+
+def sigmoid_gain(input_signal, gain):
+    # Scale and shift the output to range [-1, 1]
+    return 2 * (1 / (1 + np.exp(-gain * input_signal))) - 1
+
+############## arctan gain functions ##############
+
+def arctan_gain(input_signal, gain):
+    return 2/np.pi * np.arctan(gain * input_signal) # scale to range [-1, 1]
     

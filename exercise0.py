@@ -9,11 +9,6 @@ import farms_pylog as pylog
 
 def exercise0(**kwargs):
 
-    # declare fixed values of amplitude, frequency, and epsilon
-    A = 1
-    eps = 1
-    freq = 2
-
     pylog.info("Ex 0")
     pylog.info("Implement exercise 0")
     log_path = './logs/exercise0/'
@@ -26,7 +21,7 @@ def exercise0(**kwargs):
         compute_metrics=3,
         return_network=True,
         wavefrequency=1,
-        amp=0.5,
+        amp=0.5, # added
         **kwargs
     )
 
@@ -35,7 +30,7 @@ def exercise0(**kwargs):
         all_pars
     )
 
-    """pylog.info("Plotting the result")
+    pylog.info("Plotting the result")
 
     left_idx = controller.muscle_l
     right_idx = controller.muscle_r
@@ -73,7 +68,7 @@ def exercise0(**kwargs):
         colors="green",
         ylabel="link y-velocities",
         lw=1
-    )"""
+    )
 
 if __name__ == '__main__':
     exercise0(headless=False)
