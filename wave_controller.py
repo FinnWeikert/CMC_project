@@ -87,5 +87,5 @@ def sigmoid_gain(input_signal, gain):
 ############## arctan gain functions ##############
 
 def arctan_gain(input_signal, gain):
-    return 2/np.pi * np.arctan(gain * input_signal) # scale to range [-1, 1]
+    return 2/np.pi * np.arctan(gain * input_signal) # scaled to range [-1, 1]
     

@@ -116,13 +116,22 @@ def exercise1(**kwargs):
         
     d = 1 # debug
 
+    print("Results of the 2D parameter search for combinations of", str(nsim),
+           "amplitudes and wavefrequencies in [0.05, 2]") 
+    print("Optimal Amplitude of: ", round(speed_metric_dict["max_fspeed_PCA"][1], 3), 
+          "and wavefrequency of: ", round(speed_metric_dict["max_fspeed_PCA"][2], 3),
+          "gives PCA Fspeed: ", round(speed_metric_dict["max_fspeed_PCA"][0], 5))
+    print("Optimal Amplitude of: ", round(speed_metric_dict["max_fspeed_cycle"][1], 3), 
+          "and wavefrequency of: ", round(speed_metric_dict["max_fspeed_cycle"][2], 3),
+          "gives cycle Fspeed: ", round(speed_metric_dict["max_fspeed_cycle"][0], 5))
+
     ### THE PLOTTING COULD ALSO BE MOVED (see test_file.py plots using plot_results fun)
 
     # Plot the heat map of the parameter search (uisng plot2d)
     labels = ['Amplitude [Hz]', 'Wave frequency [Hz]', 'Forward speed [m/s]']
 
     plt.figure('2D Parameter Search PCA Fspeed', figsize=[10, 10])
-    plot_2d(para_search_results_PCA, labels, cmap='nipy_spectral')
+    plot_2d(para_search_results_PCA, labels) # to change to nicest color map
     plt.title('2D Parameter Search PCA Fspeed')
     plt.show()
 
