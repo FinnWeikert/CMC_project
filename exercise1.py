@@ -7,6 +7,7 @@ import os
 import numpy as np
 import farms_pylog as pylog
 from plotting_common import plot_2d
+from parameter_search import param_search
 
 def exercise1(**kwargs):
 
@@ -55,90 +56,8 @@ def exercise1(**kwargs):
             controllers.append(load_object("logs/exercise1/controller"+str(i)))
     d = 1 # debug
 
-    # dict to store opti params
-    speed_metric_dict = {
-        "max_fspeed_PCA": [0, None, None, None], # [speed, opti_amp, opti_wavefreq, sim_index]
-        "max_lspeed_PCA": [0, None, None, None],
-        "max_fspeed_cycle": [0, None, None, None],
-        "max_lspeed_cycle": [0, None, None, None]
-    }
-
-    # 2d array of dimension [N, 3], N = number of controllers
-    # first col: amps, second: wavefreq, and last: speed
-    para_search_results_PCA = np.zeros((len(controllers), 3))
-    para_search_results_cycle = np.zeros((len(controllers), 3))
-
-    # parameter search for highest amp and wavefrequency with highest speed
-    for i, controller in enumerate(controllers):
-
-        # extract metrics for current controller
-        amp = amps[controller.pars.simulation_i]
-        wave_freq = wave_freqs[controller.pars.simulation_i]
-        fspeed_PCA = controller.metrics['fspeed_PCA']
-        fspeed_cycle = controller.metrics['fspeed_cycle']
-
-        # store the parameters and corresponding speed in results array
-        para_search_results_PCA[i][0] = amp
-        para_search_results_PCA[i][1] = wave_freq
-        para_search_results_PCA[i][2] = fspeed_PCA
-
-        para_search_results_cycle[i][0] = amp
-        para_search_results_cycle[i][1] = wave_freq
-        para_search_results_cycle[i][2] = fspeed_cycle
-
-        # fspeed PCA
-        if np.abs(fspeed_PCA) > speed_metric_dict["max_fspeed_PCA"][0]:
-            speed_metric_dict["max_fspeed_PCA"][0] = fspeed_PCA # update fspeed
-            speed_metric_dict["max_fspeed_PCA"][1] = amp # update opti amp
-            speed_metric_dict["max_fspeed_PCA"][2] = wave_freq # update opti wavefreq
-            speed_metric_dict["max_fspeed_PCA"][3] = controller.pars.simulation_i # update simulaiton inde
-
-        # fspeed cycle
-        if np.abs(fspeed_cycle) > speed_metric_dict["max_fspeed_cycle"][0]:
-            speed_metric_dict["max_fspeed_cycle"][0] = fspeed_cycle
-            speed_metric_dict["max_fspeed_cycle"][1] = amp
-            speed_metric_dict["max_fspeed_cycle"][2] = wave_freq
-            speed_metric_dict["max_fspeed_cycle"][3] = controller.pars.simulation_i 
-
-        """# lspeed PCA (probably not needed)
-        if np.abs(controller.metrics['lspeed_PCA']) > speed_metric_dict["max_lspeed_PCA"][0]:
-            speed_metric_dict["max_lspeed_PCA"][0] = controller.metrics['lspeed_PCA'] # update lspeed
-            speed_metric_dict["max_lspeed_PCA"][1] = amp
-            speed_metric_dict["max_lspeed_PCA"][2] = wave_freq
-            speed_metric_dict["max_lspeed_PCA"][3] = controller.pars.simulation_i
-
-        # lspeed cycle (probalby not needed)
-        if np.abs(controller.metrics['lspeed_cycle']) > speed_metric_dict["max_lspeed_cycle"][0]:
-            speed_metric_dict["max_lspeed_cycle"][0] = controller.metrics['lspeed_cycle']
-            speed_metric_dict["max_lspeed_cycle"][1] = amp
-            speed_metric_dict["max_lspeed_cycle"][2] = wave_freq
-            speed_metric_dict["max_lspeed_cycle"][3] = controller.pars.simulation_i""" 
-        
-    d = 1 # debug
-
-    print("Results of the 2D parameter search for combinations of", str(nsim),
-           "amplitudes and wavefrequencies in [0.05, 2]") 
-    print("Optimal Amplitude of: ", round(speed_metric_dict["max_fspeed_PCA"][1], 3), 
-          "and wavefrequency of: ", round(speed_metric_dict["max_fspeed_PCA"][2], 3),
-          "gives PCA Fspeed: ", round(speed_metric_dict["max_fspeed_PCA"][0], 5))
-    print("Optimal Amplitude of: ", round(speed_metric_dict["max_fspeed_cycle"][1], 3), 
-          "and wavefrequency of: ", round(speed_metric_dict["max_fspeed_cycle"][2], 3),
-          "gives cycle Fspeed: ", round(speed_metric_dict["max_fspeed_cycle"][0], 5))
-
-    ### THE PLOTTING COULD ALSO BE MOVED (see test_file.py plots using plot_results fun)
-
-    # Plot the heat map of the parameter search (uisng plot2d)
-    labels = ['Amplitude [Hz]', 'Wave frequency [Hz]', 'Forward speed [m/s]']
-
-    plt.figure('2D Parameter Search PCA Fspeed', figsize=[10, 10])
-    plot_2d(para_search_results_PCA, labels) # to change to nicest color map
-    plt.title('2D Parameter Search PCA Fspeed')
-    plt.show()
-
-    plt.figure('2D Parameter Search cycle Fspeed', figsize=[10, 10])
-    plot_2d(para_search_results_cycle, labels, cmap='nipy_spectral')
-    plt.title('2D Parameter Search cycle Fspeed')
-    plt.show()
+    # perform the parameter search
+    param_search(controllers,amps, wave_freqs, nsim)
 
     d = 1 # debug
 
