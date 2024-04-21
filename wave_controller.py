@@ -28,6 +28,7 @@ class WaveController:
 
         # added
         self.square_controller = pars.square_controller
+        self.gain_steepness = pars.gain_steepness
 
     def step(self, iteration, time, timestep, pos=None):
         """
@@ -54,7 +55,6 @@ class WaveController:
         A = self.pars.amp if hasattr(self.pars, 'amp') else 0.48        
         eps = self.pars.wavefrequency if hasattr(self.pars, 'wavefrequency') else 0.48
         freq = self.pars.frequency if hasattr(self.pars, 'frequency') else 2.5
-
         activations = np.zeros(30)
         i = np.arange(self.n_joints)
 
@@ -65,11 +65,11 @@ class WaveController:
             activations[self.muscle_r] = 0.5 * (-A) / 2 * np.sin(2 * np.pi * (freq * time - eps * i / self.n_joints))
             # Proj 1 part 3 gain functions
         elif self.square_controller == "sigmoid":
-            activations[self.muscle_l] = 0.5 * A / 2 * sigmoid_gain(sin_signal, gain=5)
-            activations[self.muscle_r] = 0.5 * (-A) / 2 * sigmoid_gain(sin_signal, gain=5)
+            activations[self.muscle_l] = 0.5 * A / 2 * sigmoid_gain(sin_signal, gain=self.gain_steepness)
+            activations[self.muscle_r] = 0.5 * (-A) / 2 * sigmoid_gain(sin_signal, gain=self.gain_steepness)
         elif self.square_controller == "arctan":
-            activations[self.muscle_l] = 0.5 * A / 2 * arctan_gain(sin_signal, gain=5)
-            activations[self.muscle_r] = 0.5 * (-A) / 2 * arctan_gain(sin_signal, gain=5)
+            activations[self.muscle_l] = 0.5 * A / 2 * arctan_gain(sin_signal, gain=self.gain_steepness)
+            activations[self.muscle_r] = 0.5 * (-A) / 2 * arctan_gain(sin_signal, gain=self.gain_steepness)
         else:
             raise ValueError("Invalid controller type. Supported types are 'sine', 'square_sig', and 'square_arctan'.")
 

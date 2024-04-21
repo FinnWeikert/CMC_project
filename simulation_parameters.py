@@ -17,9 +17,9 @@ class SimulationParameters:
 
         # simulation parameters
         # "sine" for using the WaveController (Project 1), "firing_rate" for using the FiringRateController (Project 2)
-        # CHANGED: can also be "square_sig" or "square_arctan" (for Project 1 part 3)
         self.controller = "sine"
         self.square_controller = None   # ADDED: can be None, "sigmoid" or "arctan" (for Project 1 part 3)
+        self.gain_steepness = 5     # Also for Project 1 part 3
         self.n_joints = 15  # number of joints
         self.method = "ode"  # integration method (for Project 2)
         # sparse method could be benificial for many neurons and few

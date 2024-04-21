@@ -1,12 +1,10 @@
 
 from util.run_closed_loop import run_multiple
 from simulation_parameters import SimulationParameters
-import matplotlib.pyplot as plt
 from util.rw import load_object
 import os
 import numpy as np
 import farms_pylog as pylog
-from plotting_common import plot_2d
 from parameter_search import param_search
 
 def exercise1(**kwargs):

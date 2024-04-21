@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from plotting_common import plot_2d
 
 def param_search(controllers, amps, wave_freqs, 
-                 plot_results=True, cmap=None):
+                 plot_results=True, cmap='nipy_spectral'):
     """
     Perform parameter optimization of amplitude and wavefrequency 
     for forward speed and optionally plot the results.
