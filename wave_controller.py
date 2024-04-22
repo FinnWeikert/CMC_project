@@ -52,8 +52,8 @@ class WaveController:
         # Ask about this: ipls = wavefreq / freq
         # clarify what wave freq and ipls is?
 
-        A = self.pars.amp if hasattr(self.pars, 'amp') else 0.48        
-        eps = self.pars.wavefrequency if hasattr(self.pars, 'wavefrequency') else 0.48
+        A = self.pars.amp if hasattr(self.pars, 'amp') else 0.483        
+        eps = self.pars.wavefrequency if hasattr(self.pars, 'wavefrequency') else 0.7
         freq = self.pars.frequency if hasattr(self.pars, 'frequency') else 2.5
         activations = np.zeros(30)
         i = np.arange(self.n_joints)

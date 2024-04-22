@@ -15,14 +15,11 @@ def exercise0(**kwargs):
     os.makedirs(log_path, exist_ok=True)
 
     all_pars = SimulationParameters(
-        n_iterations=10001,
+        n_iterations=5001,
         controller="sine",
         log_path=log_path,
         compute_metrics=3,
         return_network=True,
-        wavefrequency=0.7, # added
-        amp=0.48, # added
-        frequency=1.5, #added
         **kwargs
     )
 
