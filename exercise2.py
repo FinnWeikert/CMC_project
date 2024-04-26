@@ -11,10 +11,10 @@ from parameter_search import param_search
 import matplotlib.pyplot as plt
 
 
-# global parameters to defines what to run
-SINGLE_SIM = False
-PARAM_SEARCH = True
-STEEPNESS = False
+# READ: global parameters to defines what to run
+SINGLE_SIM = True # single sim with plots
+PARAM_SEARCH = False # parameter search with square wave activations
+STEEPNESS = False # metrics as function of steepness
 
 # Note: changes mostly made in wave_controller for square wave implementation
 def exercise2():
@@ -29,12 +29,12 @@ def exercise2():
         all_pars = SimulationParameters(
             n_iterations=10001,
             controller="sine",
-            square_controller="sigmoid", # added
+            square_controller="sigmoid", # added can be changed to "arctan"
             gain_steepness=20,
             log_path=log_path,
             compute_metrics=3,
             return_network=True,
-            headless=False # change if want to see sim
+            headless=False 
         )
 
         pylog.info("Running the simulation")
