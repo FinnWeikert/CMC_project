@@ -79,7 +79,7 @@ def param_search(controllers, amps, wave_freqs,
     # Plot the results if required
     if plot_results:
         # Plot the heat map of the parameter search (using plot2d)
-        labels = ['Amplitude [Hz]', 'Wave frequency [Hz]', 'Forward speed [m/s]']
+        labels = ['Amplitude', 'Wave frequency [Hz]', 'Forward speed']
 
         plt.figure('2D Parameter Search PCA Fspeed', figsize=[10, 10])
         plot_2d(para_search_results_PCA, labels, cmap=cmap)  # to change to nicest color map

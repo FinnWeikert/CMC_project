@@ -21,24 +21,26 @@ PARAM_SEARCH = False
 STEEPNESS = True
 
 # Note: changes mostly made in wave_controller not here
-def exercise2(**kwargs):
+def exercise2():
 
     pylog.info("Ex 2")
     pylog.info("Implement exercise 2")
-    log_path = './logs/exercise2/'
-    os.makedirs(log_path, exist_ok=True)
 
     if SINGLE_SIM:
+        log_path = './logs/exercise2/single/'
+        os.makedirs(log_path, exist_ok=True)
+
         all_pars = SimulationParameters(
-            n_iterations=3001,
+            n_iterations=5001,
             controller="sine",
             square_controller="sigmoid", # added
+            gain_steepness=200000,
             log_path=log_path,
             compute_metrics=3,
             return_network=True,
-            wavefrequency=1,
-            amp=0.5, # added
-            **kwargs
+            headless=True,
+            wavefrequency=0.7,
+            amp=0.48, # added
         )
 
         pylog.info("Running the simulation")
@@ -75,21 +77,13 @@ def exercise2(**kwargs):
             lw=1
         )
 
-        # plot using plot_time_histories
-        plt.figure("link y-velocities")
-        plot_time_histories(
-            controller.times,
-            controller.links_velocities[:, :, 1],
-            offset=-0.,
-            colors="green",
-            ylabel="link y-velocities",
-            lw=1
-        )
-
 ##############################################################################################################
         
     if PARAM_SEARCH:
-        nsim = 5
+        log_path = './logs/exercise2/para_search/'
+        os.makedirs(log_path, exist_ok=True)
+    
+        nsim = 6
         # Lists to store amplitudes and wave frequencies per sim
         amps = []
         wave_freqs = []
@@ -101,7 +95,7 @@ def exercise2(**kwargs):
                 simulation_i=i*nsim+j,
                 n_iterations=5001, # maybe this should be a bit larger to make sure intitial cond effect vanish
                 square_controller="sigmoid", # added
-                gain_steepness=5,
+                gain_steepness=10,
                 log_path=log_path,
                 video_record=False,
                 compute_metrics=3, # changed
@@ -118,7 +112,7 @@ def exercise2(**kwargs):
         ][::2] # remove every second because the line above makes doubles the params otherwise
 
         # check if this aprameter search was run before if so acces log
-        log_controlers = os.listdir("logs/exercise2/")
+        log_controlers = os.listdir("logs/exercise2/para_search")
         # Count the number of file
         num_files = len(log_controlers)
 
@@ -128,26 +122,32 @@ def exercise2(**kwargs):
         else: # load the simulations from logs
             controllers = []
             for i in range(nsim**2):
-                controllers.append(load_object("logs/exercise2/controller"+str(i)))
+                controllers.append(load_object("logs/exercise2/para_search/controller"+str(i)))
         d = 1 # debug
 
         # perform the parameter search
         param_search(controllers, amps, wave_freqs, nsim)
 
+        d = 1 # debzg
+
 ##############################################################################################################
     if STEEPNESS:
 
-        nsim = 5  # Number of samples
+        log_path = './logs/exercise2/steepness/ '
+        os.makedirs(log_path, exist_ok=True)
+    
+        nsim = 15  # Number of samples
         base = 2  # Logarithmic base
 
-        steepnesses = np.logspace(np.log2(1), np.log2(100), nsim, base=base)
+        #steepnesses = np.logspace(np.log2(1), np.log2(100), nsim, base=base)
+        steepnesses = np.linspace(1, 50, nsim)
 
         pylog.info(
             "Running multiple simulations in parallel from a list of SimulationParameters")
         pars_list = [
             SimulationParameters(
                 simulation_i=i,
-                n_iterations=7001, # maybe this should be a bit larger to make sure intitial cond effect vanish
+                n_iterations=7001, 
                 square_controller="sigmoid", # added
                 gain_steepness=steepness,
                 log_path=log_path,
@@ -159,30 +159,77 @@ def exercise2(**kwargs):
             )
             for i, steepness in enumerate(steepnesses)
         ]
+                # check if this aprameter search was run before if so acces log
+        log_controlers = os.listdir("logs/exercise2/steepness")
+        # Count the number of file
+        num_files = len(log_controlers)
 
-        controllers = run_multiple(pars_list, num_process=8)
+        # if not corresponding number of simulations stored in logs, run the simulations
+        if num_files != nsim:
+            controllers = run_multiple(pars_list, num_process=8)
+        else: # load the simulations from logs
+            controllers = []
+            for i in range(nsim):
+                controllers.append(load_object("logs/exercise2/steepness/controller"+str(i)))
+
+        d = 1 # debug
 
         fspeed_cycle_list = []
         fspeed_PCA_list = []
+        lspeed_cycle_list = []
+        lspeed_PCA_list = []
         torques_list = []
-        ptcc_list = []
+        amp_list = []
+        #ptcc_list = []
 
         for i, controller in enumerate(controllers):
             fspeed_cycle_list.append(controller.metrics['fspeed_cycle'])
             fspeed_PCA_list.append(controller.metrics['fspeed_PCA'])
+            lspeed_cycle_list.append(controller.metrics['lspeed_cycle'])
+            lspeed_PCA_list.append(controller.metrics['lspeed_PCA'])
             torques_list.append(controller.metrics['torque'])
+            amp_list.append(controller.metrics['amp'])
             #ptcc_list.append(controller.metrics['ptcc'])
 
         combined_metrics = {
             'Fspeed PCA': fspeed_PCA_list,
             'Fspeed cycle': fspeed_cycle_list,
+            'Lspeed_PCA': lspeed_PCA_list,
+            'Lspeed_cycle': lspeed_cycle_list,
             'Total torque': torques_list,
+            'Amplitude': amp_list
             #'Ptcc': ptcc_list
         }
 
-        plot_metric_for_steepness(steepnesses, combined_metrics)
+        speed_metrics = {
+            'Fspeed PCA': fspeed_PCA_list,
+            'Fspeed cycle': fspeed_cycle_list,
+            'Lspeed_PCA': lspeed_PCA_list,
+            'Lspeed_cycle': lspeed_cycle_list
+        }
+
+        torque_metric = {
+            'Total torque': torques_list,
+        }
+
+        amplitude_metric = {
+            'Amplitude': amp_list
+        }
+
+        plot_metric_for_steepness(steepnesses, speed_metrics)
+        plot_metric_for_steepness(steepnesses, torque_metric, ylabel='Torque', speed=False, torque=True)
+        plot_metric_for_steepness(steepnesses, amplitude_metric, ylabel='Amplitude', speed=False)
+
         d = 1
 
 if __name__ == '__main__':
-    exercise2(headless=False)
+    exercise2()
     plt.show()
+
+
+
+# plot example waves & head movement + comment on deviation reason
+# plot param search ?
+# plot Fspeed as function of step
+# amplitude as function of step 
+# Torque consumption as funciton of step

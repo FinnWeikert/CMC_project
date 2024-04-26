@@ -61,17 +61,17 @@ class WaveController:
         sin_signal = np.sin(2 * np.pi * (freq * time - eps * i / self.n_joints))
                       
         if self.square_controller == None:
-            activations[self.muscle_l] = 0.5 * A / 2 * np.sin(2 * np.pi * (freq * time - eps * i / self.n_joints))
-            activations[self.muscle_r] = 0.5 * (-A) / 2 * np.sin(2 * np.pi * (freq * time - eps * i / self.n_joints))
+            activations[self.muscle_l] = 0.5 + A / 2 * sin_signal
+            activations[self.muscle_r] = 0.5 + (-A) / 2 * sin_signal
             # Proj 1 part 3 gain functions
         elif self.square_controller == "sigmoid":
-            activations[self.muscle_l] = 0.5 * A / 2 * sigmoid_gain(sin_signal, gain=self.gain_steepness)
-            activations[self.muscle_r] = 0.5 * (-A) / 2 * sigmoid_gain(sin_signal, gain=self.gain_steepness)
+            activations[self.muscle_l] = 0.5 + A / 2 * sigmoid_gain(sin_signal, steepness=self.gain_steepness)
+            activations[self.muscle_r] = 0.5 + (-A) / 2 * sigmoid_gain(sin_signal, steepness=self.gain_steepness)
         elif self.square_controller == "arctan":
-            activations[self.muscle_l] = 0.5 * A / 2 * arctan_gain(sin_signal, gain=self.gain_steepness)
-            activations[self.muscle_r] = 0.5 * (-A) / 2 * arctan_gain(sin_signal, gain=self.gain_steepness)
+            activations[self.muscle_l] = 0.5 + A / 2 * arctan_gain(sin_signal, steepness=self.gain_steepness)
+            activations[self.muscle_r] = 0.5 + (-A) / 2 * arctan_gain(sin_signal, steepness=self.gain_steepness)
         else:
-            raise ValueError("Invalid controller type. Supported types are 'sine', 'square_sig', and 'square_arctan'.")
+            raise ValueError("Invalid square controller. Supported types are 'sigmoid' and 'arctan'.")
 
         self.state[iteration] = activations
 
@@ -80,12 +80,12 @@ class WaveController:
 # Move these function somewhere else later ?
 ############## sigmoid gain functions ##############
 
-def sigmoid_gain(input_signal, gain):
+def sigmoid_gain(input_signal, steepness):
     # Scale and shift the output to range [-1, 1]
-    return 2 * (1 / (1 + np.exp(-gain * input_signal))) - 1
+    return 2 * (1 / (1 + np.exp(-steepness * input_signal))) - 1
 
 ############## arctan gain functions ##############
 
-def arctan_gain(input_signal, gain):
-    return 2/np.pi * np.arctan(gain * input_signal) # scaled to range [-1, 1]
+def arctan_gain(input_signal, steepness):
+    return 2/np.pi * np.arctan(steepness * input_signal) # scaled to range [-1, 1]
     
