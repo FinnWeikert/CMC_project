@@ -20,6 +20,9 @@ def exercise0(**kwargs):
         log_path=log_path,
         compute_metrics=3,
         return_network=True,
+        frequency=2,
+        amp=0.5,
+        wavefrequency=0.5,
         **kwargs
     )
 

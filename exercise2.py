@@ -17,8 +17,8 @@ import matplotlib.pyplot as plt
 
 # global parameters to defines what to run
 SINGLE_SIM = False
-PARAM_SEARCH = False
-STEEPNESS = True
+PARAM_SEARCH = True
+STEEPNESS = False
 
 # Note: changes mostly made in wave_controller not here
 def exercise2():
@@ -31,16 +31,14 @@ def exercise2():
         os.makedirs(log_path, exist_ok=True)
 
         all_pars = SimulationParameters(
-            n_iterations=5001,
+            n_iterations=10001,
             controller="sine",
             square_controller="sigmoid", # added
-            gain_steepness=200000,
+            gain_steepness=20,
             log_path=log_path,
             compute_metrics=3,
             return_network=True,
-            headless=True,
-            wavefrequency=0.7,
-            amp=0.48, # added
+            headless=True # change if want to see sim
         )
 
         pylog.info("Running the simulation")
@@ -83,7 +81,7 @@ def exercise2():
         log_path = './logs/exercise2/para_search/'
         os.makedirs(log_path, exist_ok=True)
     
-        nsim = 6
+        nsim = 7
         # Lists to store amplitudes and wave frequencies per sim
         amps = []
         wave_freqs = []
@@ -133,14 +131,14 @@ def exercise2():
 ##############################################################################################################
     if STEEPNESS:
 
-        log_path = './logs/exercise2/steepness/ '
+        log_path = './logs/exercise2/steepness/'
         os.makedirs(log_path, exist_ok=True)
     
-        nsim = 15  # Number of samples
+        nsim = 20  # Number of samples
         base = 2  # Logarithmic base
 
-        #steepnesses = np.logspace(np.log2(1), np.log2(100), nsim, base=base)
-        steepnesses = np.linspace(1, 50, nsim)
+        steepnesses = np.logspace(np.log2(0.1), np.log2(100), nsim, base=base)
+        #steepnesses = np.linspace(0.1, 100, nsim)
 
         pylog.info(
             "Running multiple simulations in parallel from a list of SimulationParameters")
@@ -224,7 +222,6 @@ def exercise2():
 
 if __name__ == '__main__':
     exercise2()
-    plt.show()
 
 
 

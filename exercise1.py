@@ -15,7 +15,7 @@ def exercise1(**kwargs):
     os.makedirs(log_path, exist_ok=True)
 
 
-    nsim = 10
+    nsim = 6
     # Lists to store amplitudes and wave frequencies per sim
     amps = []
     wave_freqs = []
@@ -31,6 +31,7 @@ def exercise1(**kwargs):
             compute_metrics=3, # changed
             amp=amp,
             wavefrequency=wavefrequency,
+            frequency=2,
             headless=True,
             print_metrics=False,
             return_network=True # added
