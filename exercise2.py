@@ -10,17 +10,13 @@ import farms_pylog as pylog
 from parameter_search import param_search
 import matplotlib.pyplot as plt
 
-# WHAT to plot?
-# show that the actiations are square waves,
-# plot the fspeed as a function of steepness
-# plot the torque consumption as a function of steepness
 
 # global parameters to defines what to run
 SINGLE_SIM = False
 PARAM_SEARCH = True
 STEEPNESS = False
 
-# Note: changes mostly made in wave_controller not here
+# Note: changes mostly made in wave_controller for square wave implementation
 def exercise2():
 
     pylog.info("Ex 2")
@@ -93,7 +89,7 @@ def exercise2():
         pars_list = [
             SimulationParameters(
                 simulation_i=i*nsim+j,
-                n_iterations=4001, # maybe this should be a bit larger to make sure intitial cond effect vanish
+                n_iterations=5001, 
                 square_controller="sigmoid", # added
                 gain_steepness=10,
                 log_path=log_path,
@@ -224,11 +220,3 @@ def exercise2():
 
 if __name__ == '__main__':
     exercise2()
-
-
-
-# plot example waves & head movement + comment on deviation reason
-# plot param search ?
-# plot Fspeed as function of step
-# amplitude as function of step 
-# Torque consumption as funciton of step

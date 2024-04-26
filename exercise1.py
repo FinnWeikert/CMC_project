@@ -25,7 +25,7 @@ def exercise1(**kwargs):
     pars_list = [
         SimulationParameters(
             simulation_i=i*nsim+j,
-            n_iterations=3001, # maybe this should be a bit larger to make sure intitial cond effect vanish
+            n_iterations=10001, # maybe this should be a bit larger to make sure intitial cond effect vanish
             log_path=log_path,
             video_record=False,
             compute_metrics=3, # changed
