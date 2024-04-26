@@ -20,9 +20,9 @@ def exercise0(**kwargs):
         log_path=log_path,
         compute_metrics=3,
         return_network=True,
-        frequency=2,
-        amp=0.5,
-        wavefrequency=0.5,
+        frequency=2.5,
+        amp=0.483,
+        wavefrequency=0.7,
         **kwargs
     )
 
@@ -72,6 +72,6 @@ def exercise0(**kwargs):
     )
 
 if __name__ == '__main__':
-    exercise0(headless=False)
+    exercise0(headless=True)
     plt.show()
 

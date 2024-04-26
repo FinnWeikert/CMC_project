@@ -38,7 +38,7 @@ def exercise2():
             log_path=log_path,
             compute_metrics=3,
             return_network=True,
-            headless=True # change if want to see sim
+            headless=False # change if want to see sim
         )
 
         pylog.info("Running the simulation")
@@ -75,13 +75,15 @@ def exercise2():
             lw=1
         )
 
+        plt.show()
+
 ##############################################################################################################
         
     if PARAM_SEARCH:
         log_path = './logs/exercise2/para_search/'
         os.makedirs(log_path, exist_ok=True)
     
-        nsim = 7
+        nsim = 6
         # Lists to store amplitudes and wave frequencies per sim
         amps = []
         wave_freqs = []
@@ -91,7 +93,7 @@ def exercise2():
         pars_list = [
             SimulationParameters(
                 simulation_i=i*nsim+j,
-                n_iterations=5001, # maybe this should be a bit larger to make sure intitial cond effect vanish
+                n_iterations=4001, # maybe this should be a bit larger to make sure intitial cond effect vanish
                 square_controller="sigmoid", # added
                 gain_steepness=10,
                 log_path=log_path,
@@ -99,7 +101,7 @@ def exercise2():
                 compute_metrics=3, # changed
                 amp=amp,
                 wavefrequency=wavefrequency,
-                freq = 2.5,
+                frequency = 2.5,
                 headless=True,
                 print_metrics=False,
                 return_network=True # added
@@ -138,15 +140,15 @@ def exercise2():
         base = 2  # Logarithmic base
 
         steepnesses = np.logspace(np.log2(0.1), np.log2(100), nsim, base=base)
-        #steepnesses = np.linspace(0.1, 100, nsim)
+        #steepnesses = np.linspace(0.1, 20, nsim)
 
         pylog.info(
             "Running multiple simulations in parallel from a list of SimulationParameters")
         pars_list = [
             SimulationParameters(
                 simulation_i=i,
-                n_iterations=7001, 
-                square_controller="sigmoid", # added
+                n_iterations=10001, 
+                square_controller="arctan", # added
                 gain_steepness=steepness,
                 log_path=log_path,
                 video_record=False,
@@ -186,7 +188,7 @@ def exercise2():
             lspeed_cycle_list.append(controller.metrics['lspeed_cycle'])
             lspeed_PCA_list.append(controller.metrics['lspeed_PCA'])
             torques_list.append(controller.metrics['torque'])
-            amp_list.append(controller.metrics['amp'])
+            amp_list.append(controller.metrics['amp'] / 2) # convert peak to peak amplitude to usual amplitude
             #ptcc_list.append(controller.metrics['ptcc'])
 
         combined_metrics = {
@@ -202,8 +204,8 @@ def exercise2():
         speed_metrics = {
             'Fspeed PCA': fspeed_PCA_list,
             'Fspeed cycle': fspeed_cycle_list,
-            'Lspeed_PCA': lspeed_PCA_list,
-            'Lspeed_cycle': lspeed_cycle_list
+            #'Lspeed_PCA': lspeed_PCA_list,
+            #'Lspeed_cycle': lspeed_cycle_list
         }
 
         torque_metric = {

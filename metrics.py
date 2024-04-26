@@ -269,6 +269,10 @@ def compute_controller(
     # consider sim_fraction number of steps, for the difference between left
     # and right muscle cells
     times = network.times[-nsteps_considered:]
+    test1= network.state[-nsteps_considered:,
+                            network.muscle_r]
+    test2 = network.state[-nsteps_considered:, network.muscle_l]
+
     signals = network.state[-nsteps_considered:,
                             network.muscle_r]-network.state[-nsteps_considered:,
                                                             network.muscle_l]

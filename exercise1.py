@@ -31,7 +31,7 @@ def exercise1(**kwargs):
             compute_metrics=3, # changed
             amp=amp,
             wavefrequency=wavefrequency,
-            frequency=2,
+            frequency=2.5,
             headless=True,
             print_metrics=False,
             return_network=True # added
